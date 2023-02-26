@@ -1,15 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
+import Header from './components/header/Header';
+
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+// 다크모드 테마 설정 https://mui.com/material-ui/customization/dark-mode/
+const darkTheme = createTheme({ 
+  palette: {
+    mode: 'dark',
+  },
+});
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Submodule Test
-        </p>
-      </header>
+      <ThemeProvider theme={darkTheme}>
+        <Header />
+      </ThemeProvider>
+
     </div>
   );
 }
