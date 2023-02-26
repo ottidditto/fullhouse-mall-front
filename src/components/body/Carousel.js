@@ -8,6 +8,7 @@ import {
 import imageByIndex from './imageByIndex';
 import '../../css/embla.css';
 
+// https://www.embla-carousel.com/examples/static/
 const EmblaCarousel = (props) => {
   const { slides, options } = props
   const [emblaRef, emblaApi] = useEmblaCarousel(options)
