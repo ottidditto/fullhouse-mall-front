@@ -15,7 +15,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          서브모듈 커밋 테스트
         </a>
       </header>
     </div>
