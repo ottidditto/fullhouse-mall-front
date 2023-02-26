@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import Header from './components/header/Header';
 import Body from './components/body/Body';
+import Footer from './components/footer/Footer';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,6 +19,7 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <Header />
         <Body />
+        <Footer />
       </ThemeProvider>
 
     </div>
