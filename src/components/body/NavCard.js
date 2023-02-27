@@ -17,7 +17,9 @@ function ActionAreaCard() {
           <CardMedia
             component="img"
             height="140"
-            image="fullhouse-mall-front/src/images/slide-2.jpg"
+            src={ // 이미지 경로는 상대경로로 설정하고, require()로 가져와야함.
+              require('../../images/slide-3.jpg')
+            }
             alt="img"
           />
           <CardContent>
@@ -48,12 +50,15 @@ function FullBorderedGrid() {
           },
         }}
       >
-        {[...Array(6)].map((_, index) => (
-          <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 3 }} minHeight={160}>
+        {[...Array(4)].map((_, index) => (
+          <Grid key={index} {...{ xs: 12, sm: 6, md: 4, lg: 2 }} minHeight={160}>
             <ActionAreaCard />
           </Grid>
         ))}
       </Grid>
+      <Grid xs={12} md={6} lg={4}>
+        <ActionAreaCard />
+        </Grid>
     </Box>
   );
 }
