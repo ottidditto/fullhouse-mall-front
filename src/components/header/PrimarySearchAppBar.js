@@ -15,8 +15,18 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 
-// 쇼핑카트 아이콘 설정 https://mui.com/material-ui/react-badge/
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // 쇼핑카트 아이콘 설정 https://mui.com/material-ui/react-badge/
+
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -3,
@@ -169,6 +179,9 @@ export default function PrimarySearchAppBar() {
             color="inherit"
             aria-label="open drawer"
             sx={{ mr: 2 }}
+            onClick={() => {
+              console.log('menu button clicked')
+            }}
           >
             <MenuIcon />
           </IconButton>
@@ -195,16 +208,6 @@ export default function PrimarySearchAppBar() {
                 <StyledBadge badgeContent={4} color="secondary">
                     <ShoppingCartIcon />
                 </StyledBadge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-              onClick={()=> {console.log('badge icon clicked')}}
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
             </IconButton>
             <IconButton
               size="large"
