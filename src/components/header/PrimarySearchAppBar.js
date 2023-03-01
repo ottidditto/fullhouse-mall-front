@@ -14,18 +14,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-
-import Drawer from '@mui/material/Drawer';
+// 쇼핑카트 아이콘 설정 https://mui.com/material-ui/react-badge/
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; 
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; // 쇼핑카트 아이콘 설정 https://mui.com/material-ui/react-badge/
+import { useNavigate } from 'react-router-dom';
+import { dark } from '@mui/material/styles/createPalette';
+
+const pages = ['Products', 'Model House', 'Blog'];
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -83,14 +78,15 @@ export default function PrimarySearchAppBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (event) => {
+  // 유저 메뉴 오픈
+  const handleProfileMenuOpen = (event) => {  
     setAnchorEl(event.currentTarget);
   };
 
+  // 모바일 - 우측 버튼 open/close
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
@@ -100,6 +96,27 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  // 페이지 링크 메뉴 open/close
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+    navigate('./items')
+  };
+/*
+link(page) {
+                  switch(page) {
+                    case 'Products':
+                      navigate('/items');
+                    case 'Model House':
+                      navigate('/modelhouses')
+                    case 'Blog':
+                      navigate('*');
+                  }
+                }
+*/
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -169,10 +186,13 @@ export default function PrimarySearchAppBar() {
     </Menu>
   );
 
+  // react-router-dom 페이지 이동용 함수
+  let navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="default">
         <Toolbar>
+          {/* drawer 메뉴 버튼 */}
           <IconButton
             size="large"
             edge="start"
@@ -185,14 +205,23 @@ export default function PrimarySearchAppBar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            FULLHOUSE
-          </Typography>
+
+          {/* 타이틀 FULLHOUSE */}
+          <Button 
+            onClick={()=> {navigate('/')}}>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              color="white"    // 폰트 색상
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+            >
+              FULLHOUSE
+            </Typography>            
+          </Button>
+
+
+          {/* 검색창 */}          
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -202,13 +231,68 @@ export default function PrimarySearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+
+          {/* 페이지 이동 버튼 */}             
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          {/* 모바일 페이지용 메뉴버튼 */}              
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
           <Box sx={{ flexGrow: 1 }} />
+
+          {/* 우측 버튼 - 장바구니, 유저 */}             
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {/* 장바구니 */}               
             <IconButton aria-label="cart">
                 <StyledBadge badgeContent={4} color="secondary">
                     <ShoppingCartIcon />
                 </StyledBadge>
             </IconButton>
+
+            {/* 유저 아이콘 */}               
             <IconButton
               size="large"
               edge="end"
@@ -221,6 +305,7 @@ export default function PrimarySearchAppBar() {
               <AccountCircle  onClick={()=> {console.log('user icon clicked')}}/>
             </IconButton>
           </Box>
+          {/* 유저 메뉴 */}              
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
