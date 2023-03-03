@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+import { useState } from 'react';
+import { styled, alpha} from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,10 +19,13 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'; 
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { dark } from '@mui/material/styles/createPalette';
+import Drawer from '@mui/material/Drawer';
 
-const pages = ['Products', 'Model House', 'Blog'];
+// 페이지 이동 버튼 타이틀과 실제 링크
+const pages = ['상품', '모델하우스', '예산 맞춤 서비스', '블로그'];
+const links = ['/items', '/modelhouses', '/budget', '/blog'];
 
+// 아이콘 스타일 설정
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       right: -3,
@@ -29,9 +33,9 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
       border: `2px solid ${theme.palette.background.paper}`,
       padding: '0 4px',
     },
-  }));
-  
+}));
 
+// 검색창 div 스타일 설정
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -56,7 +60,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
 }));
-
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
@@ -71,10 +74,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+// ===================================== AppBar 컴포넌트 =====================================
 export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
+  // 우측 사용자 메뉴 열림 여부
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -91,32 +96,14 @@ export default function PrimarySearchAppBar() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
   // 페이지 링크 메뉴 open/close
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-    navigate('./items')
-  };
-/*
-link(page) {
-                  switch(page) {
-                    case 'Products':
-                      navigate('/items');
-                    case 'Model House':
-                      navigate('/modelhouses')
-                    case 'Blog':
-                      navigate('*');
-                  }
-                }
-*/
+
+  // 우측 사용자 메뉴 컴포넌트
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -132,13 +119,14 @@ link(page) {
         horizontal: 'right',
       }}
       open={isMenuOpen}
-      onClose={handleMenuClose}
+      onClose={handleMenuClose} 
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
 
+  // 모바일용 우측 메뉴 컴포넌트
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
@@ -188,6 +176,10 @@ link(page) {
 
   // react-router-dom 페이지 이동용 함수
   let navigate = useNavigate();
+
+  let [drawerOpen, setDrawerOpen] = useState(false);
+
+  // ===================================== RETURN =====================================
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="default">
@@ -200,7 +192,8 @@ link(page) {
             aria-label="open drawer"
             sx={{ mr: 2 }}
             onClick={() => {
-              console.log('menu button clicked')
+              console.log('menu button clicked');
+              setDrawerOpen(true);
             }}
           >
             <MenuIcon />
@@ -220,7 +213,6 @@ link(page) {
             </Typography>            
           </Button>
 
-
           {/* 검색창 */}          
           <Search>
             <SearchIconWrapper>
@@ -233,60 +225,27 @@ link(page) {
           </Search>
 
           {/* 페이지 이동 버튼 */}             
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-          {/* 모바일 페이지용 메뉴버튼 */}              
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>   
+            {pages.map((page, i) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                // onClick={handleCloseNavMenu}
+                onClick={() => {
+                  setAnchorElNav(null);
+                  navigate(links[i]);
+                }}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
               </Button>
-            ))}
+            ))}      
           </Box>
           <Box sx={{ flexGrow: 1 }} />
 
           {/* 우측 버튼 - 장바구니, 유저 */}             
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {/* 장바구니 */}               
-            <IconButton aria-label="cart">
+            <IconButton aria-label="cart" onClick={() => { navigate('/cart') }}>
                 <StyledBadge badgeContent={4} color="secondary">
                     <ShoppingCartIcon />
                 </StyledBadge>
@@ -320,9 +279,21 @@ link(page) {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box>
+  
+      {/* 클릭하면 열리는 메뉴들 */}
+      {renderMobileMenu}  {/* 모바일용 우측 메뉴창 */}
+      {renderMenu}        {/* 우측 사용자 메뉴창 */}
 
+      {/* 좌측 탭 메뉴 - 참고자료: https://mui.com/material-ui/react-drawer/  https://webdevassist.com/reactjs-materialui/material-ui-navigation-drawer */}
+      <Drawer open={drawerOpen} anchor={'left'} onClose={() => setDrawerOpen(false)}>
+        <div style={{width: 250}}>
+          <p>Hello</p>
+        </div>
+      </Drawer>
+      {
+        // 작동을 안한다... 
+        // drawerOpen ? <Drawer open={drawerOpen} anchor='left' onClose={setDrawerOpen(false)}/> : null
+      }
+    </Box>
   );
 }
