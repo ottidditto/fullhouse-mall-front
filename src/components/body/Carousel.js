@@ -5,7 +5,7 @@ import {
   PrevButton,
   NextButton,
 } from './CarouselButton';
-import imageByIndex from './imageByIndex';
+import imageByIndex from './imageByIndex';    // 슬라이드 이미지 import
 import '../../css/embla.css';
 
 // https://www.embla-carousel.com/examples/static/

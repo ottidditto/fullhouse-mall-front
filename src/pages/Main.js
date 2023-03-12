@@ -3,7 +3,6 @@ import RoomType from "../components/body/RoomType";
 import CustomCarousel from "../components/body/Carousel";
 
 function Main() {
-    
     return (
         <>
             <CustomCarousel/> {/* 이미지 슬라이더 */}
